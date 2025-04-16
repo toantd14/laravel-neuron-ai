@@ -2,10 +2,13 @@
 
 namespace App\AI;
 
+use App\AI\Services\GetTranscription;
 use NeuronAI\Agent;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Anthropic\Anthropic;
 use NeuronAI\SystemPrompt;
+use NeuronAI\Tools\Tool;
+use NeuronAI\Tools\ToolProperty;
 
 class YouTubeAgent extends Agent
 {
@@ -31,5 +34,22 @@ class YouTubeAgent extends Agent
                 "After the summary add a list of three sentences as the three most important take away from the video.",
             ]
         );
+    }
+
+    public function tools(): array
+    {
+        return [
+            Tool::make(
+                'get_transcription',
+                'Retrieve the transcription of a youtube video.',
+            )->addProperty(
+                new ToolProperty(
+                    name: 'video_url',
+                    type: 'string',
+                    description: 'The URL of the YouTube video.',
+                    required: true
+                )
+            )->setCallable(new GetTranscription())
+        ];
     }
 }

@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('ai-agent/talk', [AIController::class, 'talkAgent']);
+Route::get('ai-agent/video', [AIController::class, 'videoTrans']);
